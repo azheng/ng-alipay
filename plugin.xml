@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="com.seatent.cordova.plugins.alipay" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+	<name>seatent-alipay-plugin</name>
+	<js-module name="seatent-alipay-plugin" src="www/seatent-alipay-plugin.js">
+		<clobbers target="AlipayPlugin" />
+	</js-module>
+	<platform name="ios">
+		<config-file target="config.xml" parent="/*">
+			<feature name="AlipayPlugin">
+				<param name="ios-package" value="AlipayPlugin"/>
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+		<config-file target="*-Info.plist" parent="CFBundleURLTypes">
+			<array>
+				<dict>
+					<key>CFBundleURLSchemes</key>
+					<array>
+						<string>chatea</string>
+					</array>
+				</dict>
+			</array>
+		</config-file>
+		<source-file src="src/ios/AlipayPlugin.m" />
+		<header-file src="src/ios/AlipayPlugin.h" />
+		<source-file src="libs/libcrypto.a" framework="true"/>
+		<source-file src="libs/libssl.a" framework="true"/>
+		<framework src="CFNetwork.framework" />
+		<framework src="SystemConfiguration.framework" />
+		<framework src="Security.framework" />
+		<framework src="libs/AlipaySDK.framework" custom="true" />
+		<resource-file src="libs/AlipaySDK.bundle" />
+	</platform>
+	<platform name="android">
+		<config-file target="res/xml/config.xml" parent="/*">
+			<feature name="AlipayPlugin">
+				<param name="android-package" value="com.seatent.cordova.plugins.alipay.AlipayPlugin"/>
+				<param name="onload" value="true" />
+			</feature>
+		</config-file>
+		<!-- 分配权限 -->
+		<config-file target="AndroidManifest.xml" parent="/*">
+			<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+			<uses-permission android:name="android.permission.INTERNET" />
+			<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+		</config-file>
+		<!-- 支付宝界面 -->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity
+				android:name="com.alipay.sdk.app.H5PayActivity"
+				android:configChanges="orientation|keyboardHidden|navigation"
+				android:exported="false"
+				android:screenOrientation="behind"
+				android:windowSoftInputMode="adjustResize|stateHidden" >
+			</activity>
+		</config-file>
+				
+		<source-file src="src/android/AlipayPlugin.java" target-dir="src/com/seatent/cordova/plugins/alipay/" />
+		<source-file src="libs/alipaysdk.jar" target-dir="libs/" />
+		<source-file src="libs/alipaysecsdk.jar" target-dir="libs/" />
+		<source-file src="libs/alipayutdid.jar" target-dir="libs/" />
+	</platform>
+</plugin>
